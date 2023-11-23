@@ -1,3 +1,4 @@
+#建立数据库
 from exts import db
 from datetime import datetime
 
