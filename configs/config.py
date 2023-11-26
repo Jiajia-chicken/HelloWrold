@@ -104,3 +104,43 @@ def is_vaild_timeout(date): # 格式: yyyy-mm-dd hh:mm:ss
     if time_stamp < now:
         return True
     else: return False
+
+# 获取当前日期
+def get_cur_time():
+    cur_time = str(datetime.now())[0:19]
+    return cur_time
+
+# 密码加密
+def get_md5(pwd):
+    obj = hashlib.md5()
+    obj.update(pwd.encode('utf-8'))
+    result = obj.hexdigest()
+    return result
+
+# 发送邮件
+sender = '854247283@qq.com'  # 填写发信人的邮箱账号
+email_pwd = 'truvgaqovcubbcde'  # 发件人邮箱授权码
+get_user = '3614700373@qq.com'  # 收件人邮箱账号
+def mail(info, title): # 邮件内容和邮件标题
+    ret = True
+    try:
+        msg = MIMEText(info, 'plain', 'utf-8')  # 填写邮件内容
+        msg['From'] = formataddr(["howd", sender])  # 括号里的对应发件人邮箱昵称、发件人邮箱账号
+        msg['To'] = formataddr(["cindy", get_user])  # 括号里的对应收件人邮箱昵称、收件人邮箱账号
+        msg['Subject'] = title  # 邮件的主题，也可以说是标题
+
+        server = smtplib.SMTP_SSL("smtp.qq.com", 465)  # 发件人邮箱中的SMTP服务器
+        server.login(sender, email_pwd)  # 括号中对应的是发件人邮箱账号、邮箱授权码
+        server.sendmail(sender, [get_user, ], msg.as_string())  # 括号中对应的是发件人邮箱账号、收件人邮箱账号、发送邮件
+        server.quit()  # 关闭连接
+    except Exception:  # 如果 try 中的语句没有执行，则会执行下面的 ret=False
+        ret = False
+    return ret
+
+# 通知阅读表
+class NoticeRead(db.Model):
+    __tablename__ = 'notice_read'
+    __table_args__ = {
+        'autoload': True,
+        'autoload_with': db.engine
+    }
